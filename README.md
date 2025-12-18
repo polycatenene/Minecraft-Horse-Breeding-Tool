@@ -4,7 +4,7 @@ A CLI tool for predicting, managing, and optimizing Minecraft horse breeding wit
 
 ---
 
-## Table of Contents
+## 目录 / Table of Contents
 1. [简介 / Introduction](#简介--introduction)
 2. [功能特性 / Features](#功能特性--features)
 3. [安装运行 / Installation & Run](#安装运行--installation--run)
