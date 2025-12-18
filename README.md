@@ -78,19 +78,64 @@ After running `python horse.py`, use the following commands (supports "baka" key
 
 ### Example
 ```bash
-# Add a horse with HP=25, Jump=3.5, Speed=12.0
-add 25 3.5 12.0
+# 1. Add multiple horses (HP:15-30, Jump:1.086-5.293, Speed:4.8375-14.5125)
+# 添加多匹符合属性范围的马匹
+add 22 2.8 10.5
+add 28 3.9 13.2
+add 18 1.5 8.7
+add 25 4.1 12.8
+add 20 3.0 9.9
 
-# Display all horses in stable
+# 2. Show all horses in the stable (check added data)
+# 查看马厩中所有马匹（验证添加结果）
 show
 
-# Predict offspring of Horse 1 and Horse 2
+# 3. Sort horses by "speed" (descending order)
+# 按速度降序排序马匹
+sort speed
+
+# 4. Weighted sort (e.g., prioritize HP=0.3, Jump=0.5, Speed=0.2)
+# 加权排序（例：生命值权重0.3、跳跃0.5、速度0.2）
+weight 0.3 0.5 0.2
+
+# 5. Modify a horse's attribute (e.g., update Horse 2's HP to 29)
+# 修改马匹属性（例：将2号马的生命值改为29）
+modify 2 hp 29
+modify 3 jump 2.2  # Update Horse 3's jump height to 2.2
+modify 4 speed 13.5 # Update Horse 4's speed to 13.5
+
+# 6. Show "baka" horses (underperforming in all stats)
+# 查看全属性落后的「baka马」
+show baka
+
+# 7. Delete a specific horse (e.g., remove Horse 3)
+# 删除指定马匹（例：删除3号马）
+kill 3
+
+# 8. Delete all baka horses (clean up underperforming ones)
+# 删除所有baka马（清理低效马匹）
+kill baka
+
+# 9. Predict offspring (breed Horse 1 and Horse 2)
+# 预测繁殖后代（让1号马与2号马配对）
 breed 1 2
 
-# Convert jump strength 0.8 to in-game height
-height 0.8
-```
+# 10. Convert jump values (strength ↔ height)
+# 跳跃值双向转换（强度↔高度）
+height 0.75  # Convert strength 0.75 to in-game height
+strength 3.5 # Convert height 3.5 to internal strength
 
+# 11. Export all horses as importable "add" commands (for backup/transfer)
+# 导出所有马匹为可导入的add命令（备份/迁移用）
+save
+
+# 12. Show help for more details
+# 查看帮助文档（获取更多命令说明）
+help
+
+# 13. Exit the tool
+# 退出工具
+exit
 ---
 
 ## 跳跃模型说明 / Jump Model
@@ -102,6 +147,7 @@ H(J) = -0.1817584952·J³ + 3.689713992·J² + 2.128599134·J − 0.343930367
 ```
 - `H`: Jump height (in-game units) / 跳跃高度（游戏内单位）  
 - `J`: Jump strength (game internal value) / 跳跃强度（游戏内部值）
+```
 
 ---
 
