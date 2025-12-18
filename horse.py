@@ -120,9 +120,9 @@ class Stable:
             if h.id == hid2:
                 horse2 = h
         if not (horse1 and horse2):
-            return False, "Horse ID not found"
+            return False, "Horse ID not found\n"
         if horse1.id == horse2.id:
-            return False, "Cannot breed the same horse"
+            return False, "Cannot breed the same horse\n"
 
 
         hp_min = (horse1.hp + horse2.hp + self.min_hp)/3
@@ -137,9 +137,9 @@ class Stable:
         print(f"  Horse{horse1.id}: HP={horse1.hp}, JUMP={horse1.jump:.3f}, SPEED={horse1.speed:.3f}")
         print(f"  Horse{horse2.id}: HP={horse2.hp}, JUMP={horse2.jump:.3f}, SPEED={horse2.speed:.3f}")
         print("Offspring Possible Range:")
-        print(f"  HP: {hp_min:.1f} - {hp_max:.1f}")
-        print(f"  JUMP: {jump_min:.3f} - {jump_max:.3f}")
-        print(f"  SPEED: {speed_min:.3f} - {speed_max:.3f}\n")
+        print(f"  HP:     {hp_min:.1f} - {hp_max:.1f}")
+        print(f"  JUMP:   {jump_min:.3f} - {jump_max:.3f}")
+        print(f"  SPEED:  {speed_min:.3f} - {speed_max:.3f}\n")
         return True, ""
 
 
@@ -188,16 +188,16 @@ def jump_height_to_strength(H: float) -> float:
 stable = Stable()
 help_text()
 while True:
-    cmd = input("Enter command (type 'help' for assistance):\n  ").strip().split()
+    cmd = input("> ").strip().split()
     if not cmd:
         continue
 
     match cmd:
         case ["add", hp, jump, speed]:
             if stable.add_horse(hp, jump, speed):
-                print("add success")
+                print("add success\n")
             else:
-                print("add failed")
+                print("add failed\n")
 
         case ["sort", attr] if attr in ("hp", "jump", "speed"):
             stable.sort_by(attr)
@@ -210,11 +210,11 @@ while True:
             try:
                 hid = int(hid)
                 if stable.modify_horse(hid, attr, value):
-                    print("modify success")
+                    print("modify success\n")
                 else:
-                    print("modify failed")
+                    print("modify failed\n")
             except:
-                print("modify failed")
+                print("modify failed\n")
 
         case ["weight", w1, w2, w3]:
             try:
@@ -222,24 +222,24 @@ while True:
                 stable.sort_by_weight(w1, w2, w3)
                 stable.table(title=f"Weighted Sort (HP×{w1} + JUMP×{w2} + SPEED×{w3})")
             except:
-                print("weight failed")
+                print("weight failed\n")
 
         case ["show", "baka"]:
             stable.show_baka()
 
         case ["kill", "baka"]:
             if stable.delete_baka():
-                print("All baka horses deleted")
+                print("All baka horses deleted\n")
             else:
-                print("No baka horses to delete")
+                print("No baka horses to delete\n")
 
         case ["kill", hid]:
             try:
                 hid = int(hid)
                 if stable.delete_by_id(hid):
-                    print(f"Horse {hid} deleted")
+                    print(f"Horse {hid} deleted\n")
                 else:
-                    print(f"Horse {hid} not found")
+                    print(f"Horse {hid} not found\n")
             except:
                 print("delete failed")
 
@@ -248,9 +248,9 @@ while True:
                 hid1, hid2 = int(hid1), int(hid2)
                 success, msg = stable.breed_predict(hid1, hid2)
                 if not success:
-                    print(f"breed predict failed: {msg}")
+                    print(f"breed predict failed: {msg}\n")
             except:
-                print("breed predict failed")
+                print("breed predict failed\n")
 
         case ["save"]:
             if stable.horses:
@@ -259,13 +259,13 @@ while True:
                     print(f"add {horse.hp} {horse.jump:.2f} {horse.speed:.2f}")
                 print("=================================\n")
             else:
-                print("No horses in stable to export")
+                print("No horses in stable to export\n")
 
         case ["help"]:
             help_text()
 
         case ["exit"]:
-            print("Exiting program")
+            print("Exiting program\n")
             break
 
         case ["height", J]:
@@ -273,9 +273,9 @@ while True:
                 J = float(J)
                 if 0.4 <= J <= 1.0:
                     H = jump_strength_to_height(J)
-                    print(f"Jump height: {H:.3f}")
+                    print(f"Jump height: {H:.3f}\n")
                 else:
-                    print("Jump strength must be between 0.4 and 1.0")
+                    print("Jump strength must be between 0.4 and 1.0\n")
             except:
                 print("failed")
 
@@ -284,11 +284,11 @@ while True:
                 H = float(H)
                 if 1.086 <= H <= 5.293:
                     J = jump_height_to_strength(H)
-                    print(f"Jump strength: {J:.3f}")
+                    print(f"Jump strength: {J:.3f}\n")
                 else:
-                    print("Jump height must be between 1.086 and 5.293")
+                    print("Jump height must be between 1.086 and 5.293\n")
             except:
-                print("failed")
+                print("failed\n")
 
         case _:
-            print("invalid command")
+            print("invalid command\n")
