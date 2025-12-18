@@ -1,2 +1,22 @@
 # Minecraft Horse Breeding Tool
-我的世界马匹培育轻量 Python 工具！追踪属性、预测后代、识别落后马、转换跳跃力/高度、排序导出数据，助你高效培育顶级马匹，开源易用。Lightweight Python CLI tool for Minecraft horse breeding! Track stats, predict offspring, identify backward horses, convert jump values (strength/height), sort/export data. Breed top-tier horses efficiently.
+A command-line tool for predicting and managing Minecraft horse breeding stats.
+
+## Features
+
+- Add / delete / modify horses
+- Detect dominated (baka) horses
+- Sort by attributes or weighted score
+- Predict offspring stats using **Jump Strength inheritance**
+- Accurate non-linear jump height conversion
+
+## Jump Model
+
+Jump Height H is computed from Jump Strength J:
+
+H(J) = -0.1817584952·J³ + 3.689713992·J² + 2.128599134·J − 0.343930367  
+(Valid for 0.4 ≤ J ≤ 1.0)
+
+## Usage
+
+```bash
+python horse.py
