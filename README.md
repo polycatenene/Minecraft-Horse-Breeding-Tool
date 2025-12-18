@@ -4,9 +4,9 @@ A command-line tool for predicting and managing Minecraft horse breeding stats.
 ## Features
 
 - Add / delete / modify horses
-- Detect dominated (baka) horses
+- Detect dominated (backward/baka) horses
 - Sort by attributes or weighted score
-- Predict offspring stats using **Jump Strength inheritance**
+- Predict offspring stats (using **Jump Strength inheritance**)
 - Accurate non-linear jump height conversion
 
 ## Jump Model
