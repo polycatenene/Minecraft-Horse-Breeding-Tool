@@ -127,39 +127,43 @@ class Stable:
 
         hp_min = (horse1.hp + horse2.hp + self.min_hp)/3
         hp_max = (horse1.hp + horse2.hp + self.max_hp)/3
-        jump_min = (horse1.jump + horse2.jump + self.min_jump)/3
-        jump_max = (horse1.jump + horse2.jump + self.max_jump)/3
+        hp_av = (hp_max - hp_min)/2
+        jump_strength_sum = jump_height_to_strength(horse1.jump) + jump_height_to_strength(horse1.jump)
+        jump_min = jump_strength_to_height((jump_strength_sum + 0.4)/3)
+        jump_max = jump_strength_to_height((jump_strength_sum + 1.0)/3)
+        jump_av = jump_strength_to_height((jump_strength_sum + 0.7)/3)
         speed_min = (horse1.speed + horse2.speed + self.min_speed)/3
         speed_max = (horse1.speed + horse2.speed + self.max_speed)/3
+        speed_av = (speed_max - speed_min)/2
 
         print(f"\nBreed Prediction: Horse{horse1.id} × Horse{horse2.id}")
         print("Parent Stats:")
         print(f"  Horse{horse1.id}: HP={horse1.hp}, JUMP={horse1.jump:.3f}, SPEED={horse1.speed:.3f}")
         print(f"  Horse{horse2.id}: HP={horse2.hp}, JUMP={horse2.jump:.3f}, SPEED={horse2.speed:.3f}")
         print("Offspring Possible Range:")
-        print(f"  HP:     {hp_min:.1f} - {hp_max:.1f}")
-        print(f"  JUMP:   {jump_min:.3f} - {jump_max:.3f}")
-        print(f"  SPEED:  {speed_min:.3f} - {speed_max:.3f}\n")
+        print(f"  HP:     ({hp_min:.1f} -[{hp_av:.1f}]- {hp_max:.1f})")
+        print(f"  JUMP:   ({jump_min:.3f} -[{jump_av:.3f}]- {jump_max:.3f})")
+        print(f"  SPEED:  ({speed_min:.3f} -[{speed_av:.3f}]- {speed_max:.3f})\n")
         return True, ""
 
 
 def help_text():
     print(
         "\n===== MC Horse Breeding Tool Commands =====",
-        "add <hp> <jump> <speed>    - Add new horse (HP:15-30, JUMP(height):1.086≤x≤5.293, SPEED:4.8375≤x≤14.5125)",
-        "show                       - Show all horses",
-        "sort <hp|jump|speed>       - Sort by attribute (descending)",
-        "weight <w1> <w2> <w3>      - Sort by weight (HP×w1 + JUMP×w2 + SPEED×w3)",
-        "modify <id> <attr> <value> - Modify horse attribute (attr: hp/jump/speed)",
-        "show baka                  - Show horses dominated in all stats by others",
-        "kill <id>                  - Delete horse by ID",
-        "kill baka                  - Delete all baka horses",
-        "breed <id1> <id2>          - Predict offspring stats",
-        "save                       - Export add commands for next import",
-        "height <jump_strength>     - Convert jump height to strength(0.4~1.0)",
-        "strength <jump_height>     - Convert jump strength to height",
-        "help                       - Show this help",
-        "exit                       - Exit program",
+        "add <hp> <jump> <speed>     - Add new horse (HP:15-30, JUMP(height):1.086≤x≤5.293, SPEED:4.8375≤x≤14.5125)",
+        "show                        - Show all horses",
+        "sort <hp|jump|speed>        - Sort by attribute (descending)",
+        "weight <w1> <w2> <w3>       - Sort by weight (HP×w1 + JUMP×w2 + SPEED×w3)",
+        "modify <id> <attr> <value>  - Modify horse attribute (attr: hp/jump/speed)",
+        "show baka                   - Show horses dominated in all stats by others",
+        "kill <id>                   - Delete horse by ID",
+        "kill baka                   - Delete all baka horses",
+        "breed <id1> <id2>           - Predict offspring stats",
+        "save                        - Export add commands for next import",
+        "height <jump_strength>      - Convert jump height to strength(0.4~1.0)",
+        "strength <jump_height>      - Convert jump strength to height",
+        "help                        - Show this help",
+        "exit                        - Exit program",
         "==========================================\n",
         sep="\n  "
     )
