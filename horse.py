@@ -81,15 +81,17 @@ class Stable:
         return len(self.horses) < before
 
     def sort_by(self, attr):
+        old_ids = {h: h.id for h in self.horses}
         self.horses.sort(key=lambda h: getattr(h, attr), reverse=True)
         self.renumber()
+        self.table_with_change(old_ids, title=f"Sorted by {attr} (Descending)")
 
     def sort_by_weight(self, w1, w2, w3):
-        self.horses.sort(
-            key=lambda h: h.hp * w1 + h.jump * w2 + h.speed * w3,
-            reverse=True
-        )
+        old_ids = {h: h.id for h in self.horses}
+        self.horses.sort(key=lambda h: h.hp * w1 + h.jump * w2 + h.speed * w3, reverse=True)
         self.renumber()
+        self.table_with_change(old_ids, title=f"Weighted Sort (HP×{w1} + JUMP×{w2} + SPEED×{w3})")
+
 
     def table(self, title="Stable Horses"):
         print(f"\n{title}")
@@ -97,6 +99,19 @@ class Stable:
         print("-" * 30)
         for h in self.horses:
             print(f"{h.id:2d}\t{h.hp:2d}\t{h.jump:.2f}\t{h.speed:.2f}")
+        print(f"Total: {len(self.horses)} horses\n")
+    def table_with_change(self, old_ids, title="Stable Horses"):
+        print(f"\n{title}")
+        print(f"{'ID':>2}  {'Δ':^4}   {'HP':>2}  {'JUMP':>6}  {'SPEED':>6}")
+        print("-" * 36)
+
+        for h in self.horses:
+            old = old_ids.get(h, h.id)
+            delta = old - h.id
+            if delta > 0: dstr = f"+{delta} ↑"
+            elif delta < 0: dstr = f"{delta} ↓"
+            else: dstr = " 0   "
+            print(f"{h.id:2d}  {dstr:^5}  {h.hp:2d}  {h.jump:6.2f}  {h.speed:6.2f}")
         print(f"Total: {len(self.horses)} horses\n")
 
     def show_baka(self):
@@ -206,7 +221,6 @@ while True:
 
         case ["sort", attr] if attr in ("hp", "jump", "speed"):
             stable.sort_by(attr)
-            stable.table(title=f"Sorted by {attr} (Descending)")
 
         case ["show"]:
             stable.table()
@@ -225,7 +239,6 @@ while True:
             try:
                 w1, w2, w3 = float(w1), float(w2), float(w3)
                 stable.sort_by_weight(w1, w2, w3)
-                stable.table(title=f"Weighted Sort (HP×{w1} + JUMP×{w2} + SPEED×{w3})")
             except:
                 print("weight failed\n")
 
