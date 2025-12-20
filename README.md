@@ -67,8 +67,8 @@ After running `python horse.py`, use the following commands (supports "baka" key
 | `sort <hp/jump/speed>`   | Sort horses by specified attribute (descending) / 按指定属性降序排序                        |
 | `weight <w1> <w2> <w3>`  | Sort by weighted score (HP×w1 + Jump×w2 + Speed×w3) / 按自定义权重分数排序                  |
 | `modify <id> <attr> <val>` | Modify a horse’s attribute by ID (attr: hp/jump/speed) / 按ID修改马匹属性（属性：hp/jump/speed） |
-| `delete <id>`            | Delete a horse by ID / 按ID删除马匹                                                          |
-| `delete baka`            | Delete all underperforming horses / 删除所有baka马                                          |
+| `kill <id>`            | Delete a horse by ID / 按ID删除马匹                                                          |
+| `kill baka`            | Delete all underperforming horses / 删除所有baka马                                          |
 | `breed <id1> <id2>`      | Predict offspring stats of two horses / 预测两匹马的后代属性范围                              |
 | `height <strength>`      | Convert jump strength to height / 将跳跃强度转换为高度                                      |
 | `strength <height>`      | Convert jump height to strength / 将跳跃高度转换为强度                                      |
