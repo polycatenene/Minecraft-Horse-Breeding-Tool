@@ -127,14 +127,14 @@ class Stable:
 
         hp_min = (horse1.hp + horse2.hp + self.min_hp)/3
         hp_max = (horse1.hp + horse2.hp + self.max_hp)/3
-        hp_av = (hp_max - hp_min)/2
+        hp_av = (hp_max + hp_min)/2
         jump_strength_sum = jump_height_to_strength(horse1.jump) + jump_height_to_strength(horse1.jump)
         jump_min = jump_strength_to_height((jump_strength_sum + 0.4)/3)
         jump_max = jump_strength_to_height((jump_strength_sum + 1.0)/3)
         jump_av = jump_strength_to_height((jump_strength_sum + 0.7)/3)
         speed_min = (horse1.speed + horse2.speed + self.min_speed)/3
         speed_max = (horse1.speed + horse2.speed + self.max_speed)/3
-        speed_av = (speed_max - speed_min)/2
+        speed_av = (speed_max + speed_min)/2
 
         print(f"\nBreed Prediction: Horse{horse1.id} × Horse{horse2.id}")
         print("Parent Stats:")
