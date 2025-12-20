@@ -69,7 +69,8 @@ class Stable:
 
     def dominated(self, h):
         for o in self.horses:
-            if o is not h and o.hp >= h.hp and o.jump >= h.jump and o.speed >= h.speed:
+            if o is h: continue
+            if ( o.hp >= h.hp and o.jump >= h.jump and o.speed >= h.speed) and not ( o.hp == h.hp and o.jump == h.jump and o.speed == h.speed):
                 return True
         return False
 
