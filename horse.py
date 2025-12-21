@@ -1,6 +1,6 @@
 class Horse:
     def __init__(self, hp_, jump_, speed_):
-        self.hp = int(hp_)
+        self.hp = float(hp_)
         self.jump = float(jump_)
         self.speed = float(speed_)
         self.id = None
@@ -9,8 +9,8 @@ class Horse:
 class Stable:
     def __init__(self):
         self.horses = []
-        self.min_hp = 15
-        self.max_hp = 30
+        self.min_hp = 15.0
+        self.max_hp = 30.0
         self.min_jump = 1.086
         self.max_jump = 5.293
         self.min_speed = 4.8375
@@ -25,18 +25,14 @@ class Stable:
 
     def check(self, hp_, jump_, speed_):
         if not (self.min_hp <= hp_ <= self.max_hp and
-                self.min_jump - 0.01 <= jump_ <= self.max_jump + 0.01 and
-                self.min_speed - 0.01 <= speed_ <= self.max_speed + 0.01):
+                self.min_jump <= jump_ <= self.max_jump and
+                self.min_speed <= speed_ <= self.max_speed):
             return False
         return True
 
     def add_horse(self, hp_, jump_, speed_):
-        try:
-            hp_ = int(hp_)
-            jump_ = float(jump_)
-            speed_ = float(speed_)
-        except Exception as e_:
-            return False, f"Error: {e_}"
+        try: hp_, jump_, speed_ = map(float, [hp_, jump_, speed_])
+        except Exception as e_: return False, f"Error: {e_}"
         if not self.check(hp_, jump_, speed_):
             return False, "Error: Invalid horse attributes"
         self.horses.append(Horse(hp_, jump_, speed_))
@@ -47,21 +43,20 @@ class Stable:
         for h in self.horses:
             if h.id == hid_:
                 try:
+                    v = float(value_)
                     if attr_ == "hp":
-                        v = int(value_)
                         if self.check(v, h.jump, h.speed):
                             h.hp = v
                             return True, ""
                     elif attr_ == "jump":
-                        v = float(value_)
                         if self.check(h.hp, v, h.speed):
                             h.jump = v
                             return True, ""
                     elif attr_ == "speed":
-                        v = float(value_)
                         if self.check(h.hp, h.jump, v):
                             h.speed = v
                             return True, ""
+                    else: return False, f"Error: Invalid attribute {attr_}"
                 except Exception as e_:
                     return False, f"Error: {e_}"
         return False, "Error: Invalid horse id"
@@ -75,7 +70,8 @@ class Stable:
     def dominated(self, h):
         for o in self.horses:
             if o is h: continue
-            if ( o.hp >= h.hp and o.jump >= h.jump and o.speed >= h.speed) and not ( o.hp == h.hp and o.jump == h.jump and o.speed == h.speed):
+            if (( o.hp >= h.hp and o.jump >= h.jump and o.speed >= h.speed) and
+                    not ( o.hp == h.hp and o.jump == h.jump and o.speed == h.speed)):
                 return True
         return False
 
@@ -93,22 +89,24 @@ class Stable:
 
     def sort_by_weight(self, w1_, w2_, w3_):
         old_ids = {h: h.id for h in self.horses}
-        self.horses.sort(key=lambda h: h.hp * w1_ + h.jump * w2_ + h.speed * w3_, reverse=True)
+        scores = {h: h.hp * w1_ + h.jump * w2_ + h.speed * w3_ for h in self.horses}
+        self.horses.sort(key=lambda h: scores[h], reverse=True)
         self.renumber()
-        self.table_with_change(old_ids, title=f"Weighted Sort (HP×{w1_} + JUMP×{w2_} + SPEED×{w3_})")
+        self.table_with_change(old_ids, title=f"Weighted Sort (HP×{w1_} + JUMP×{w2_} + SPEED×{w3_})", scores=scores)
 
 
     def table(self, title="Stable Horses"):
         print(f"\n{title}")
-        print("ID\tHP\tJUMP\tSPEED")
+        print("ID\t HP\tJUMP\tSPEED")
         print("-" * 30)
         for h in self.horses:
-            print(f"{h.id:2d}\t{h.hp:2d}\t{h.jump:.2f}\t{h.speed:.2f}")
+            print(f"{h.id:2d}\t{h.hp:3.1f}\t{h.jump:4.2f}\t{h.speed:5.2f}")
         print(f"Total: {len(self.horses)} horses\n")
-    def table_with_change(self, old_ids, title="Stable Horses"):
+
+    def table_with_change(self, old_ids, title="Stable Horses", scores=None):
         print(f"\n{title}")
-        print(f"{'ID':>2}  {'Δ':^4}   {'HP':>2}  {'JUMP':>6}  {'SPEED':>6}")
-        print("-" * 36)
+        print(f"{'ID':>2}  {'Δ':^4}  {'HP':>4}   {'JUMP':>6}   {'SPEED':>6}   {'SCORE' if scores else '':>6}")
+        print("-" * (33 + (9 if scores else 0)))
 
         for h in self.horses:
             old = old_ids.get(h, h.id)
@@ -116,7 +114,8 @@ class Stable:
             if delta > 0: dstr = f"+{delta} ↑"
             elif delta < 0: dstr = f"{delta} ↓"
             else: dstr = " 0   "
-            print(f"{h.id:2d}  {dstr:^5}  {h.hp:2d}  {h.jump:6.2f}  {h.speed:6.2f}")
+            print(f"{h.id:2d}  {dstr:^5}  {h.hp:4.1f}  {h.jump:6.2f}   {h.speed:6.2f}  ",
+                  f"{scores[h]:6.2f}" if scores else "")
         print(f"Total: {len(self.horses)} horses\n")
 
     def show_baka(self):
@@ -161,20 +160,21 @@ class Stable:
         print("Offspring Possible Range:")
         print(f"  HP:     ({hp_min:.1f} -[{hp_av:.1f}]- {hp_max:.1f})")
         print(f"  JUMP:   ({jump_min:.3f} -[{jump_av:.3f}]- {jump_max:.3f})")
-        print(f"  SPEED:  ({speed_min:.3f} -[{speed_av:.3f}]- {speed_max:.3f})\n")
+        print(f"  SPEED:  ({speed_min:.3f} -[{speed_av:.3f}]- {speed_max:.3f})")
         return (horse1, horse2), ""
 
     def probability(self, horse1, horse2):
         odds_hp = int(self.max_hp - (3 * self.target.hp - horse1.hp - horse2.hp) + 1)/(self.max_hp - self.min_hp + 1)
         odds_jump = (1.0 - (3 * jump_height_to_strength(self.target.jump) - self.jump_strength_sum))/0.6
-        odds_speed = (self.max_speed - (3 * self.target.speed - horse1.speed - horse2.speed))/(self.max_speed - self.min_speed)
+        odds_speed = ((self.max_speed - (3 * self.target.speed - horse1.speed - horse2.speed))/
+                      (self.max_speed - self.min_speed))
         print(" Probability calculation:",
-              f"target HP{self.target.hp}: {odds_hp * 100:.3g}%" if odds_hp > 0.0
-              else f"impossible to achieve target HP{self.target.hp}",
-              f"target JUMP{self.target.jump:.3f}: {odds_jump * 100:.3g}%" if odds_jump > 0.0
-              else f"impossible to achieve target JUMP{self.target.jump:.3f}",
-              f"target SPEED{self.target.speed:.3f}: {odds_speed * 100:.3g}%" if odds_speed > 0.0
-              else f"impossible to achieve target SPEED{self.target.speed:.3f}",
+              f"target HP {self.target.hp}: {odds_hp * 100:.3g}%" if odds_hp > 0.0
+              else f"impossible to achieve target HP {self.target.hp:.1f}",
+              f"target JUMP {self.target.jump:.3f}: {odds_jump * 100:.3g}%" if odds_jump > 0.0
+              else f"impossible to achieve target JUMP {self.target.jump:.2f}",
+              f"target SPEED {self.target.speed:.3f}: {odds_speed * 100:.3g}%" if odds_speed > 0.0
+              else f"impossible to achieve target SPEED {self.target.speed:.2f}",
               f"Fully achieved: {odds_hp * odds_jump * odds_speed * 100:.3g}%\n"
               if all([odds_hp > 0.0, odds_jump > 0.0, odds_speed > 0.0]) else "impossible to achieve fully\n", sep='\n  ')
 
@@ -251,10 +251,10 @@ while True:
 
         case ["factor", w1, w2, w3]:
             try:
-                w1, w2, w3 = float(w1), float(w2), float(w3)
-                stable.factor = (w1, w2, w3)
+                stable.factor = map(float, [w1, w2, w3])
+                print(f"factors changed\n")
             except Exception as e:
-                print(f"factor failed: {e}\n")
+                print(f"change failed: {e}\n")
 
         case ["weight"]:
             stable.sort_by_weight(*stable.factor)
@@ -278,7 +278,7 @@ while True:
 
         case ["target", hp, jump, speed]:
             try:
-                hp, jump, speed = int(hp), float(jump), float(speed)
+                hp, jump, speed = float(hp), float(jump), float(speed)
                 if stable.check(hp, jump, speed):
                     stable.target = Horse(hp, jump, speed)
                     print("Successfully set target\n")
