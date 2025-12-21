@@ -251,7 +251,7 @@ while True:
 
         case ["factor", w1, w2, w3]:
             try:
-                stable.factor = map(float, [w1, w2, w3])
+                stable.factor = tuple(map(float, [w1, w2, w3]))
                 print(f"factors changed\n")
             except Exception as e:
                 print(f"change failed: {e}\n")
