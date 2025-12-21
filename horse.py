@@ -125,7 +125,7 @@ class Stable:
         output = False
         for h in self.horses:
             if self.dominated(h):
-                print(f"{h.id:2d}\t{h.hp:2d}\t{h.jump:.2f}\t{h.speed:.2f}")
+                print(f"{h.id:2d}\t{h.hp:3.1f}\t{h.jump:4.2f}\t{h.speed:5.2f}")
                 output = True
         if not output:
             print("No baka horse found")
