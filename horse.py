@@ -105,8 +105,8 @@ class Stable:
 
     def table_with_change(self, old_ids, title="Stable Horses", scores=None):
         print(f"\n{title}")
-        print(f"{'ID':>2}  {'Δ':^4}  {'HP':>4}   {'JUMP':>6}   {'SPEED':>6}   {'SCORE' if scores else '':>6}")
-        print("-" * (33 + (9 if scores else 0)))
+        print(f"{'ID':>2}  {'Δ':^4}   {'HP':>4}   {'JUMP':>6}   {'SPEED':>6}   {'SCORE' if scores else '':>6}")
+        print("-" * (34 + (9 if scores else 0)))
 
         for h in self.horses:
             old = old_ids.get(h, h.id)
@@ -114,7 +114,7 @@ class Stable:
             if delta > 0: dstr = f"+{delta} ↑"
             elif delta < 0: dstr = f"{delta} ↓"
             else: dstr = " 0   "
-            print(f"{h.id:2d}  {dstr:^5}  {h.hp:4.1f}  {h.jump:6.2f}   {h.speed:6.2f}  ",
+            print(f"{h.id:2d}  {dstr:^5}   {h.hp:4.1f}  {h.jump:6.2f}   {h.speed:6.2f}  ",
                   f"{scores[h]:6.2f}" if scores else "")
         print(f"Total: {len(self.horses)} horses\n")
 
