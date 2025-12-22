@@ -169,12 +169,9 @@ class Stable:
         odds_speed = ((self.max_speed - (3 * self.target.speed - horse1.speed - horse2.speed))/
                       (self.max_speed - self.min_speed))
         print(" Probability calculation:",
-              f"target HP {self.target.hp: .1f}: {odds_hp * 100:.3g}%" if odds_hp > 0.0
-              else f"impossible to achieve target HP {self.target.hp:.1f}",
-              f"target JUMP {self.target.jump:.2f}: {odds_jump * 100:.3g}%" if odds_jump > 0.0
-              else f"impossible to achieve target JUMP {self.target.jump:.2f}",
-              f"target SPEED {self.target.speed:.2f}: {odds_speed * 100:.3g}%" if odds_speed > 0.0
-              else f"impossible to achieve target SPEED {self.target.speed:.2f}",
+              f"target HP {self.target.hp: .1f}: {odds_hp * 100 if odds_hp > 0 else 0:.3g}%" ,
+              f"target JUMP {self.target.jump:.2f}: {odds_jump * 100 if odds_jump > 0 else 0:.3g}%" ,
+              f"target SPEED {self.target.speed:.2f}: {odds_speed * 100 if odds_speed > 0 else 0:.3g}%" ,
               f"Fully achieved: {odds_hp * odds_jump * odds_speed * 100:.3g}%\n"
               if all([odds_hp > 0.0, odds_jump > 0.0, odds_speed > 0.0]) else "impossible to achieve fully\n", sep='\n  ')
 
